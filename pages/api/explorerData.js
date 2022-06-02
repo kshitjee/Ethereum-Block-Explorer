@@ -15,17 +15,22 @@ export default async function handler(req, res) {
   var isSmartContract;
 
   // taking request(string) and constructing the JavaScript object for it
-  var userInput = JSON.parse(req.body);
+  var userInput = JSON.parse(req.body).userInput;
+  userInput = userInput.substring(1, userInput.length);
   console.log(userInput);
 
   // if POST request, find out what the user has inputted and send response back accordingly
   if (req.method === "POST") {
     // check if block, if so send response
     try {
-      await provider.getBlock(parseInt(userInput.userInput)).then((block) => {
-        res.status(200).json(block);
-      });
+      const block = await provider.getBlock(parseInt(userInput));
       isBlock = true;
+
+      const response = {
+        type: "block",
+        block: block,
+      };
+      res.status(200).json(response);
     } catch (error) {
       isBlock = false;
     }
@@ -33,10 +38,14 @@ export default async function handler(req, res) {
     // check if transaction, if so send response
     if (isBlock === false) {
       try {
-        await provider.getTransaction(userInput.userInput).then((tx) => {
-          res.status(200).json(tx);
-        });
+        const tx = await provider.getTransaction(userInput);
         isTransaction = true;
+
+        const response = {
+          type: "tx",
+          transaction: tx,
+        };
+        res.status(200).json(response);
       } catch (error) {
         isTransaction = false;
       }
@@ -44,18 +53,19 @@ export default async function handler(req, res) {
 
     // check if public address, if so send response
     if (isTransaction === false && isBlock === false) {
-      const contractCode = await provider.getCode(userInput.userInput);
+      const contractCode = await provider.getCode(userInput);
 
       if (contractCode === "0x") {
         // we now know it is a public address
 
         // extracting transaction history and balance of address
-        const history = await etherscanProvider.getHistory(userInput.userInput);
-        let balance = await provider.getBalance(userInput.userInput);
+        const history = await etherscanProvider.getHistory(userInput);
+        let balance = await provider.getBalance(userInput);
 
         balance = ethers.utils.formatEther(balance);
 
         const response = {
+          type: "public address",
           balance: balance,
           history: history,
         };
@@ -75,10 +85,11 @@ export default async function handler(req, res) {
       isPublicAddress === false
     ) {
       try {
-        const contractCode = await provider.getCode(userInput.userInput);
-        const contractBalance = await provider.getBalance(userInput.userInput);
+        const contractCode = await provider.getCode(userInput);
+        const contractBalance = await provider.getBalance(userInput);
 
         const response = {
+          type: "contract",
           contractCode: contractCode,
           contractBalance: contractBalance,
         };
