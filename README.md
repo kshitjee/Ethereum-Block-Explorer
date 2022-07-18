@@ -1,6 +1,7 @@
 ## BLOCK EXPLORER
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is an Ethereum Block Explorer that was created using the Ethers.js library and the Etherscan API. It was an introduction to understanding transactions 
+on Ethereum. Next.js was used to create this web application. MongoDB was used to create a simple user database. 
 
 ## Getting Started
 
@@ -21,29 +22,4 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 ## MongoDB
 
 Look at .env.local file for the details:
-mongodb+srv://eashan-d:mongobongo@exp-cluster.ymtef.mongodb.net/sample_mflix?retryWrites=true&w=majority
-MONGODB_URI = "mongodb+srv://eashan-d:mongobongo@exp-cluster.ymtef.mongodb.net/sample_mflix?retryWrites=true&w=majority"
-DB_NAME=sample_mflix
-
-Super Admin Login for DB:
-Username: eashan-d
-Password: mongobongo
-
 Testing & Monitering done using MongoDB Atlas (https://www.mongodb.com/atlas/database) & MongoDB Compass Application (https://www.mongodb.com/products/compass)
-
-
-# Basic Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
